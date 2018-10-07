@@ -6,7 +6,7 @@ import java.net.*;
 public class EchoClient {
     public static void main(String[] args) throws Exception {
          
-        if (args.length != 1) { //If the expected use is not given, exit and print message
+        if (args.length != 1) { //If the expected argument is not given, exit and print usage requirements
             System.err.println("Usage: java EchoClient <host name>");
             System.exit(1);
         }
@@ -22,14 +22,14 @@ public class EchoClient {
         ) {
             String userInput;
 			String exit = ".";
-            while ((userInput = stdIn.readLine()) != null) { // read line and send to echo server 
+            while ((userInput = stdIn.readLine()) != null) { // Read line and send to echo server 
                 prOut.println(userInput);
 				if(userInput.equals(exit)){
-					System.exit(1);
+					System.exit(1); // Exit when user enters character . 
 				}
                 System.out.println("Server: " + bufIn.readLine()); // Print reply
             }
-        } catch (Exception e) { // Throw exception if something does wrong
+        } catch (Exception e) { // Throw exception if something goes wrong
             System.err.println("Something went wrong");
 			System.out.println(e.getMessage());
         }

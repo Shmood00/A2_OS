@@ -7,7 +7,7 @@ import java.io.*;
 public class EchoServer {
     public static void main(String[] args) throws Exception {
          
-        if (args.length != 0) { // If the expected use is not given, exit and print message
+        if (args.length != 0) { // If the expected argument is not given, exit and print message
             System.err.println("Usage: java EchoServer");
             System.exit(1);
         }
