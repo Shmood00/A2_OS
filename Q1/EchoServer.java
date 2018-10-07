@@ -3,6 +3,11 @@ import java.io.*;
  
 public class EchoServer {
     public static void main(String[] args) throws Exception {
+	
+	if (args.length != 0) {
+            System.err.println("Usage: java EchoServer");
+            System.exit(1);
+        }
 
         int portNumber = 44288;
          
