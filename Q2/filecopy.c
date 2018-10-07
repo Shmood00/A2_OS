@@ -7,15 +7,26 @@
 /*
 Adam Iannaci, Ian Gerics
 
+*****NOTE*****
+Cristina, you told us to leave you a note about our program.
+For some reason, our program will occasionally only copy over
+the first line of the input file. For example, if my input file has:
+test
+1
+2
+
+The copy file will sometimes only contain "test" and not the full 
+contents of the file.
+
 */
 
 int main(int argc, char *argv[]){
 
-        int readWrite[2];
-        pid_t child;
+        int readWrite[2]; /* Define array for pipe */
+        pid_t child; /* Define process identifier */
         FILE *file, *file2;
-        char readBuffer[100000];
-        char fileBuffer[100000]; 
+        char readBuffer[100000]; /* Define buffer for reading */
+        char fileBuffer[100000]; /* Define file buffer */
 
 	if((argc-1) != 2){
 		fprintf(stderr, "%s", "Error, must enter in 2 arguments.\n");
@@ -23,9 +34,9 @@ int main(int argc, char *argv[]){
 		exit(1);
 	}
 
-        pipe(readWrite);
+        pipe(readWrite); /* Create pipe */
 
-        child = fork();
+        child = fork(); /* Start process */
 
         if(child < 0){
                 perror("Fork error\n");
@@ -33,8 +44,10 @@ int main(int argc, char *argv[]){
         }
 
         if(child == 0){
-               
-                close(readWrite[0]);
+                /* Child */
+                /* Writing */
+
+                close(readWrite[0]); /* Close input side of pipe */
                 
                 file = fopen(argv[1], "r");
 		
@@ -42,18 +55,19 @@ int main(int argc, char *argv[]){
 			fprintf(stderr, "%s", "File not found.\n");
 		}else{
 
-		        while(fgets(fileBuffer, sizeof(fileBuffer), file) != NULL){
+		        while(fgets(fileBuffer, sizeof(fileBuffer), file) != NULL){ /* Loop through file to read */
 
-		                write(readWrite[1], fileBuffer, strlen(fileBuffer));
+		                write(readWrite[1], fileBuffer, strlen(fileBuffer)); /* Write to pipe */
 
 		        }
 
-		        fclose(file);
+		        fclose(file); /* Close file */
 		}
 
         }else{
-              
-                close(readWrite[1]);
+                /* Parent */
+                /* Reading */
+                close(readWrite[1]); /* Close output side of pipe */
                 
 		file2 = fopen(argv[2], "w");
 		
@@ -61,11 +75,11 @@ int main(int argc, char *argv[]){
 			fprintf(stderr, "%s", "Error opening file.\n");		
 		}else{
 		               
-			read(readWrite[0], readBuffer, sizeof(readBuffer));
+			read(readWrite[0], readBuffer, sizeof(readBuffer)); /* Read from pipe */
 
-			fprintf(file2, "%s", readBuffer);
+			fprintf(file2, "%s", readBuffer); /* Write to file */
 				
-			fclose(file2);
+			fclose(file2); /* Close file */
 		}
 
         }
